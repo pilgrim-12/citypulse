@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
+import { getUserProfile, createUserProfile } from "@/lib/firestore";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -21,7 +22,7 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
     }
@@ -32,10 +33,23 @@ export default function LoginPage() {
     setError("");
 
     try {
-      await signInWithPopup(auth, googleProvider);
+      const { user } = await signInWithPopup(auth, googleProvider);
+
+      // Проверяем существует ли профиль, если нет - создаем
+      const existingProfile = await getUserProfile(user.uid);
+
+      if (!existingProfile) {
+        await createUserProfile(
+          user.uid,
+          user.email,
+          user.displayName,
+          user.photoURL
+        );
+      }
+
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
     }

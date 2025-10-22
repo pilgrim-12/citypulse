@@ -45,12 +45,20 @@ export default function DashboardPage() {
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-blue-600">CityPulse</h1>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-          >
-            Logout
-          </button>
+          <div className="flex items-center space-x-4">
+            <a
+              href="/profile"
+              className="px-4 py-2 text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Profile
+            </a>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -63,7 +71,7 @@ export default function DashboardPage() {
 
           <div className="mt-8 p-4 bg-blue-50 rounded-lg">
             <h3 className="text-xl font-semibold mb-2">
-              🎉 Dashboard Coming Soon!
+              Dashboard Coming Soon!
             </h3>
             <p className="text-gray-700">Here we will show:</p>
             <ul className="list-disc ml-6 mt-2 text-gray-700">

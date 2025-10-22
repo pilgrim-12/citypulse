@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { createUserProfile } from "@/lib/firestore";
 import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
@@ -27,6 +28,15 @@ export default function RegisterPage() {
       await updateProfile(userCredential.user, {
         displayName: name,
       });
+
+      // Создаем профиль в Firestore
+      await createUserProfile(
+        userCredential.user.uid,
+        userCredential.user.email,
+        name,
+        null
+      );
+
       router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
